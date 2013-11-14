@@ -132,15 +132,15 @@ angular.module('notifications', []).
       },
 
       error: function(title, content, userData){
-        return this.awesomeNotify('error', 'remove', title, content, userData);
+        return this.awesomeNotify('error', 'error', title, content, userData);
       },
 
       success: function(title, content, userData){
-        return this.awesomeNotify('success', 'ok', title, content, userData);
+        return this.awesomeNotify('success', 'success', title, content, userData);
       },
 
       warning: function(title, content, userData){
-        return this.awesomeNotify('warning', 'exclamation', title, content, userData);
+        return this.awesomeNotify('warning', 'warning', title, content, userData);
       },
 
       awesomeNotify: function(type, icon, title, content, userData){
