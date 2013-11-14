@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('notifications', []).
-  factory('$notification', ['$timeout',function($timeout){
+  factory('$notification', ['$timeout', '$templateCache', function($timeout, $templateCache) {
 
     console.log('notification service online');
     var notifications = JSON.parse(localStorage.getItem('$notifications')) || [],
@@ -17,8 +17,27 @@ angular.module('notifications', []).
       details: true,
       localStorage: false,
       html5Mode: false,
-      html5DefaultIcon: 'icon.png'
+      html5DefaultIcon: 'icon.png',
+      templateName: 'dr-notification-template'
     };
+
+    $templateCache.put('dr-notification-template',
+        '<div class="dr-notification-wrapper" ng-repeat="noti in queue">' +
+            '<div class="dr-notification-close-btn" ng-click="removeNotification(noti)">' +
+                '<i class="icon-remove"></i>' +
+            '</div>' +
+            '<div class="dr-notification">' +
+                '<div class="dr-notification-image dr-notification-type-{{noti.type}}" ng-switch on="noti.image">' +
+                    '<i class="icon-{{noti.icon}}" ng-switch-when="false"></i>' +
+                    '<img ng-src="{{noti.image}}" ng-switch-default />' +
+                '</div>' +
+                '<div class="dr-notification-content">' +
+                    '<h3 class="dr-notification-title">{{noti.title}}</h3>' +
+                    '<p class="dr-notification-text">{{noti.content}}</p>' +
+                '</div>' +
+            '</div>' +
+        '</div>'
+    );
 
     function html5Notify(icon, title, content, ondisplay, onclose){
       if(window.webkitNotifications.checkPermission() === 0){
@@ -202,7 +221,7 @@ angular.module('notifications', []).
 
     };
   }]).
-  directive('notifications', ['$notification', '$compile', function($notification, $compile){
+  directive('notifications', ['$notification', '$compile', '$templateCache', function($notification, $compile, $templateCache){
     /**
      *
      * It should also parse the arguments passed to it that specify
@@ -212,23 +231,7 @@ angular.module('notifications', []).
      * Finally, the directive should have its own controller for
      * handling all of the notifications from the notification service
      */
-    console.log('this is a new directive');
-    var html =
-      '<div class="dr-notification-wrapper" ng-repeat="noti in queue">' +
-        '<div class="dr-notification-close-btn" ng-click="removeNotification(noti)">' +
-          '<i class="icon-remove"></i>' +
-        '</div>' +
-        '<div class="dr-notification">' +
-          '<div class="dr-notification-image dr-notification-type-{{noti.type}}" ng-switch on="noti.image">' +
-            '<i class="icon-{{noti.icon}}" ng-switch-when="false"></i>' +
-            '<img ng-src="{{noti.image}}" ng-switch-default />' +
-          '</div>' +
-          '<div class="dr-notification-content">' +
-            '<h3 class="dr-notification-title">{{noti.title}}</h3>' +
-            '<p class="dr-notification-text">{{noti.content}}</p>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
+    var html = $templateCache.get($notification.getSettings().templateName);
 
 
     function link(scope, element, attrs){
