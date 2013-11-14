@@ -14,7 +14,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.1.4"
+    "angular": "~1.2.0"
   },
   "homepage": "https://github.com/michaelwoods/angular-notifications",
   "authors": [
