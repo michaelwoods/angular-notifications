@@ -3,7 +3,6 @@
 angular.module('notifications', []).
   factory('$notification', ['$timeout', '$templateCache', function($timeout, $templateCache) {
 
-    console.log('notification service online');
     var notifications = JSON.parse(localStorage.getItem('$notifications')) || [],
         queue = [];
 
@@ -94,7 +93,6 @@ angular.module('notifications', []).
 
       requestHtml5ModePermissions: function(){
         if (window.webkitNotifications){
-          console.log('notifications are available');
           if (window.webkitNotifications.checkPermission() === 0) {
             return true;
           }
@@ -111,7 +109,6 @@ angular.module('notifications', []).
           }
         }
         else{
-          console.log('notifications are not supported');
           return false;
         }
       },
@@ -131,7 +128,6 @@ angular.module('notifications', []).
       /* ============== NOTIFICATION METHODS ==============*/
 
       info: function(title, content, userData){
-        console.log(title, content);
         return this.awesomeNotify('info','info', title, content, userData);
       },
 
@@ -181,9 +177,8 @@ angular.module('notifications', []).
 
         if(settings.html5Mode){
           html5Notify(image, title, content, function(){
-            console.log("inner on display function");
           }, function(){
-            console.log("inner on close function");
+
           });
         }
         else{
@@ -203,11 +198,9 @@ angular.module('notifications', []).
 
       save: function(){
         // Save all the notifications into localStorage
-        // console.log(JSON);
         if(settings.localStorage){
           localStorage.setItem('$notifications', JSON.stringify(notifications));
         }
-        // console.log(localStorage.getItem('$notifications'));
       },
 
       restore: function(){
